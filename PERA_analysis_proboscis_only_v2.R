@@ -432,11 +432,11 @@ model_trial_2_scaled <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_c
                          Sugar_before_salt + time_sc + delta_pres_sc + (1 + time_sc + Treatment|subject) + 
                          (1|date_test), data=NaCl_reshaped, family=binomial)
 
-#Changed the optimizer and number of iterations.
-model_trial_2_scaled <- update(model_trial_2_scaled,control=glmerControl(optimizer="bobyqa"))
+#Changed the optimizer.
+model_trial_2.1_scaled <- update(model_trial_2_scaled,control=glmerControl(optimizer="bobyqa"))
 
-summary(model_trial_2_scaled)
-car::Anova(model_trial_2_scaled)
+summary(model_trial_2.1_scaled)
+car::Anova(model_trial_2.1_scaled)
 
 #Maybe time shouldn't be considered a random effect per this:
 #https://stats.stackexchange.com/questions/110004/how-scared-should-we-be-about-convergence-warnings-in-lme4
