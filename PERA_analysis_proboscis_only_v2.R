@@ -412,21 +412,45 @@ model_trial_1 <- glm(PER ~ Background*Allele*Sex*Treatment + salt_conc + date_te
                      data=NaCl_reshaped, family=binomial, x=T)
 summary(model_trial_1)
 
-###problems start here - model fails to converge
+###problems start here - model 2 fails to converge
+#Warning messages:
+#1: Some predictor variables are on very different scales: consider rescaling 
+#2: In (function (fn, par, lower = rep.int(-Inf, n), upper = rep.int(Inf,  :failure to converge in 10000 evaluations
+#3: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :unable to evaluate scaled gradient
+#4: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :Model failed to converge: degenerate  Hessian with 1 negative eigenvalues
 
+NaCl_reshaped$salt_conc <- as.factor(NaCl_reshaped$salt_conc) #solved first convergence issue by making salt_conc as factor
 
 model_trial_2 <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
                          Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
-                         (1|date_test), data=NaCl_reshaped, 
-                       family=binomial)
-summary(model_trial_2)
-car::Anova(model_trial_2)
+                         (1|date_test), data=NaCl_reshaped, family=binomial)
+
+#Tried to get rid of non-convergence warnings by scaling time & rerunning model2. Did not work.
+NaCl_reshaped$time_sc <- scale(NaCl_reshaped$time)
+NaCl_reshaped$delta_pres_sc <- scale(NaCl_reshaped$delta_pres)
+model_trial_2_scaled <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
+                         Sugar_before_salt + time_sc + delta_pres_sc + (1 + time_sc + Treatment|subject) + 
+                         (1|date_test), data=NaCl_reshaped, family=binomial)
+
+#Changed the optimizer and number of iterations.
+model_trial_2_scaled <- update(model_trial_2_scaled,control=glmerControl(optimizer="bobyqa"))
+
+summary(model_trial_2_scaled)
+car::Anova(model_trial_2_scaled)
+
+#Maybe time shouldn't be considered a random effect per this:
+#https://stats.stackexchange.com/questions/110004/how-scared-should-we-be-about-convergence-warnings-in-lme4
+
+
+
 
 model_trial_3 <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
                               Sugar_before_salt + time + delta_pres + (1 + Treatment|subject) + 
                               (1|date_test), data=NaCl_reshaped, 
                             family=binomial)
-summary(model_trial_3)#this is model1 in my manuscript
+
+summary(model_trial_3_scaled)#this is model1 in my manuscript, also gives convergence warnings 
+
 
 #getting correlations between random effects
 VarCorr(model_trial_3)
