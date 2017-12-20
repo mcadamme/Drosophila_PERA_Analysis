@@ -432,25 +432,30 @@ model_trial_2_scaled <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_c
                          Sugar_before_salt + time_sc + delta_pres_sc + (1 + time_sc + Treatment|subject) + 
                          (1|date_test), data=NaCl_reshaped, family=binomial)
 
-#Changed the optimizer.
-model_trial_2.1_scaled <- update(model_trial_2_scaled,control=glmerControl(optimizer="bobyqa"))
+
+#trying nAGQ=0 per this thread: https://stat.ethz.ch/pipermail/r-sig-mixed-models/2017q3/025802.html
+model_trial_2.1_scaled <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
+                                Sugar_before_salt + time_sc + delta_pres_sc + (1 + time_sc + Treatment|subject) + 
+                                (1|date_test), data=NaCl_reshaped, nAGQ=0, family=binomial)
 
 summary(model_trial_2.1_scaled)
 car::Anova(model_trial_2.1_scaled)
 
-#Maybe time shouldn't be considered a random effect per this:
-#https://stats.stackexchange.com/questions/110004/how-scared-should-we-be-about-convergence-warnings-in-lme4
+#Do I need the time and delta_pres to be scaled when nAGQ is set to 0? No.
+model_trial_2.1 <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
+                                  Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
+                                  (1|date_test), data=NaCl_reshaped, nAGQ=0, family=binomial)
 
-
+summary(model_trial_2.1)
+car::Anova(model_trial_2.1)
 
 
 model_trial_3 <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
                               Sugar_before_salt + time + delta_pres + (1 + Treatment|subject) + 
-                              (1|date_test), data=NaCl_reshaped, 
-                            family=binomial)
+                              (1|date_test), data=NaCl_reshaped, nAGQ=0, family=binomial)
 
-summary(model_trial_3_scaled)#this is model1 in my manuscript, also gives convergence warnings 
-
+summary(model_trial_3)#this is model1 in my manuscript
+car::Anova(model_trial_3)
 
 #getting correlations between random effects
 VarCorr(model_trial_3)
@@ -460,41 +465,38 @@ VarCorr(model_trial_3)
 #summary(model_trial_3)
 #sink(NULL)
 
-car::Anova(model_trial_3)
-
-
 model_trial_4 <- glmer(PER ~ (Background + Allele + Treatment)^2 + Sex + salt_conc + Sugar_before_salt + time + delta_pres + 
-                         (1 + time + Treatment|subject) + (1|date_test), data=NaCl_reshaped, family=binomial)
+                         (1 + time + Treatment|subject) + (1|date_test), data=NaCl_reshaped, nAGQ=0, family=binomial)
 
-summary(model_trial_4)#model 2 in manuscript
+summary(model_trial_4) #model 2 in manuscript
 car::Anova(model_trial_4)
 
 model_trial_5 <- glmer(PER ~ Background + Allele + Treatment + Sex + salt_conc + Sugar_before_salt + time + delta_pres + 
-                         (1 + Treatment|subject) + (1|date_test), data=NaCl_reshaped, family=binomial)
+                         (1 + Treatment|subject) + (1|date_test), data=NaCl_reshaped, nAGQ=0,family=binomial)
 
 summary(model_trial_5)#model 3 in manuscript
 car::Anova(model_trial_5)
 
 model_trial_6 <- glmer(PER ~ Background + Allele + Treatment + Sex + salt_conc + Sugar_before_salt + time +  
-                         (1 + Treatment|subject) + (1|date_test), data=NaCl_reshaped, family=binomial)
+                         (1 + Treatment|subject) + (1|date_test), data=NaCl_reshaped, nAGQ=0,family=binomial)
 
 summary(model_trial_6)#model 4 in manuscript
 car::Anova(model_trial_6)
 
 model_trial_7 <- glmer(PER ~ Background + Allele + Treatment + Sex + salt_conc + time +  
-                         (1 + Treatment|subject) + (1|date_test), data=NaCl_reshaped, family=binomial)
+                         (1 + Treatment|subject) + (1|date_test), data=NaCl_reshaped, nAGQ=0,family=binomial)
 
 summary(model_trial_7)#model 5 in manuscript
 car::Anova(model_trial_7)
 
 model_trial_8 <- glmer(PER ~ Background + Allele + Treatment + Sex + time +  
-                         (1 + Treatment|subject) + (1|date_test), data=NaCl_reshaped, family=binomial)
+                         (1 + Treatment|subject) + (1|date_test), data=NaCl_reshaped, nAGQ=0,family=binomial)
 
 summary(model_trial_8)#model 6 in manuscript
 car::Anova(model_trial_8)
 
-AIC(model_trial_2,model_trial_3,model_trial_4, model_trial_5, model_trial_6, model_trial_7, model_trial_8)
-BIC(model_trial_2,model_trial_3,model_trial_4, model_trial_5, model_trial_6, model_trial_7, model_trial_8)
+AIC(model_trial_2.1,model_trial_3,model_trial_4, model_trial_5, model_trial_6, model_trial_7, model_trial_8)
+BIC(model_trial_2.1,model_trial_3,model_trial_4, model_trial_5, model_trial_6, model_trial_7, model_trial_8)
 
 
 #reduced for checking signifcance of delta_pres
