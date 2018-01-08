@@ -1,6 +1,6 @@
 #Data Analysis for PERAs - tastants applied to labellar sensilla.
 
-x <- c("sciplot", "lme4", "car", "effects", "bbmle", "ggplot2", "gridExtra") 
+x <- c("sciplot", "lme4", "car", "effects", "bbmle", "ggplot2", "gridExtra", "RCurl", "optimx") 
 
 lapply(x, FUN = function(X) {
   do.call("library", list(X)) 
@@ -412,7 +412,7 @@ model_trial_1 <- glm(PER ~ Background*Allele*Sex*Treatment + salt_conc + date_te
                      data=NaCl_reshaped, family=binomial, x=T)
 summary(model_trial_1)
 
-###problems start here - model 2 fails to converge
+###problems start here - model 2 fails to converge, all others also have warnings...
 #Warning messages:
 #1: Some predictor variables are on very different scales: consider rescaling 
 #2: In (function (fn, par, lower = rep.int(-Inf, n), upper = rep.int(Inf,  :failure to converge in 10000 evaluations
@@ -425,6 +425,8 @@ model_trial_2 <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc +
                          Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
                          (1|date_test), data=NaCl_reshaped, family=binomial)
 
+summary(model_trial_2) #do parameter estimates at least look similar to previous estimates when run with R 2.15.1 (prev had no error)?
+
 #Tried to get rid of non-convergence warnings by scaling time & rerunning model2. Did not work.
 NaCl_reshaped$time_sc <- scale(NaCl_reshaped$time)
 NaCl_reshaped$delta_pres_sc <- scale(NaCl_reshaped$delta_pres)
@@ -432,27 +434,45 @@ model_trial_2_scaled <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_c
                          Sugar_before_salt + time_sc + delta_pres_sc + (1 + time_sc + Treatment|subject) + 
                          (1|date_test), data=NaCl_reshaped, family=binomial)
 
+summary(model_trial_2_scaled)
+
+#trying different optimizer
+model_trial_2_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
+                         Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
+                         (1|date_test), data=NaCl_reshaped, family=binomial, control=glmerControl(optimizer = "nloptwrap"))
+
+summary(model_trial_2_optim) #still fails to converge, but some warnings (i.e. degenerate Hessian) gone.
 
 #trying nAGQ=0 per this thread: https://stat.ethz.ch/pipermail/r-sig-mixed-models/2017q3/025802.html
-model_trial_2.1_scaled <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
-                                Sugar_before_salt + time_sc + delta_pres_sc + (1 + time_sc + Treatment|subject) + 
-                                (1|date_test), data=NaCl_reshaped, nAGQ=0, family=binomial)
-
-summary(model_trial_2.1_scaled)
-car::Anova(model_trial_2.1_scaled)
-
-#Do I need the time and delta_pres to be scaled when nAGQ is set to 0? No.
 model_trial_2.1 <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
                                   Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
-                                  (1|date_test), data=NaCl_reshaped, nAGQ=0, family=binomial)
+                                  (1|date_test), data=NaCl_reshaped, nAGQ=0, family=binomial) #brute force gets rid of warning
 
 summary(model_trial_2.1)
-car::Anova(model_trial_2.1)
+car::Anova(model_trial_2.1) 
+#gets rid warnings, but not sure this is the best approach. Will come back to it.
+
+#trying optimx - nlminb.
+model_trial_2.2_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
+                                 Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
+                                 (1|date_test), data=NaCl_reshaped, family=binomial, 
+                               control=glmerControl(optimizer = "optimx", optCtrl = list(method="nlminb")))
+
+summary(model_trial_2.2_optim)
+
+#trying optimx - L-BFGS-B
+model_trial_2.3_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
+                                 Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
+                                 (1|date_test), data=NaCl_reshaped, family=binomial, 
+                               control=glmerControl(optimizer = "optimx", optCtrl = list(method="L-BFGS-B")))
+
+summary(model_trial_2.3_optim)
 
 
 model_trial_3 <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
                               Sugar_before_salt + time + delta_pres + (1 + Treatment|subject) + 
-                              (1|date_test), data=NaCl_reshaped, nAGQ=0, family=binomial)
+                              (1|date_test), data=NaCl_reshaped, family=binomial,
+                              control=glmerControl(optimizer = "optimx", optCtrl = list(method="nlminb")))
 
 summary(model_trial_3)#this is model1 in my manuscript
 car::Anova(model_trial_3)
@@ -466,7 +486,7 @@ VarCorr(model_trial_3)
 #sink(NULL)
 
 model_trial_4 <- glmer(PER ~ (Background + Allele + Treatment)^2 + Sex + salt_conc + Sugar_before_salt + time + delta_pres + 
-                         (1 + time + Treatment|subject) + (1|date_test), data=NaCl_reshaped, nAGQ=0, family=binomial)
+                         (1 + time + Treatment|subject) + (1|date_test), data=NaCl_reshaped, family=binomial)
 
 summary(model_trial_4) #model 2 in manuscript
 car::Anova(model_trial_4)
