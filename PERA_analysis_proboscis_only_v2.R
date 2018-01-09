@@ -473,7 +473,7 @@ model_trial_2.2_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_
 
 summary(model_trial_2.2_optim)
 
-#trying bobyqa optimizer
+#trying nloptwrap bobyqa optimizer
 model_trial_2.3_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
                                  Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
                                  (1|date_test), data=NaCl_reshaped, family=binomial, 
@@ -481,14 +481,36 @@ model_trial_2.3_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_
 
 summary(model_trial_2.3_optim)
 
+model_trial_2.4_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
+                                 Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
+                                 (1|date_test), data=NaCl_reshaped, family=binomial, 
+                               control=glmerControl(optimizer = "bobyqa"))
+
+summary(model_trial_2.4_optim) 
+
+#looking at differences in model likelihoods
+model_list <- c(model_trial_2, model_trial_2_cont, model_trial_2_fewIt, model_trial_2_optim, 
+                model_trial_2.1_optim, model_trial_2.2_optim, model_trial_2.3_optim, model_trial_2.4_optim)
+
+lliks <- sapply(model_list, logLik) #some of these look the same. But it seems clear that this is a model issue.
+
+#What happens if I reduce my model complexity?
 
 model_trial_3 <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
                               Sugar_before_salt + time + delta_pres + (1 + Treatment|subject) + 
-                              (1|date_test), data=NaCl_reshaped, family=binomial,
-                              control=glmerControl(optimizer = "optimx", optCtrl = list(method="nlminb")))
+                              (1|date_test), data=NaCl_reshaped, family=binomial)
 
 summary(model_trial_3)#this is model1 in my manuscript
 car::Anova(model_trial_3)
+
+#still gives me convergence warning.
+
+logLik(model_trial_3)
+AIC(model_trial_2, model_trial_3)
+BIC(model_trial_2, model_trial_3)
+
+#likelihoods and likelihood-based model selection tools give conflicting info about whether including time
+#as a random effect is important.  Perhaps best to keep it in.
 
 #getting correlations between random effects
 VarCorr(model_trial_3)
@@ -499,7 +521,7 @@ VarCorr(model_trial_3)
 #sink(NULL)
 
 model_trial_4 <- glmer(PER ~ (Background + Allele + Treatment)^2 + Sex + salt_conc + Sugar_before_salt + time + delta_pres + 
-                         (1 + time + Treatment|subject) + (1|date_test), data=NaCl_reshaped, family=binomial)
+                         (1 + Treatment|subject) + (1|date_test), data=NaCl_reshaped, family=binomial)
 
 summary(model_trial_4) #model 2 in manuscript
 car::Anova(model_trial_4)
