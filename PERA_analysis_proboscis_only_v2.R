@@ -436,35 +436,48 @@ model_trial_2_scaled <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_c
 
 summary(model_trial_2_scaled)
 
-#trying different optimizer
+#bumping up number iterations - doesn't help.
+
+ss <- getME(model_trial_2, c("theta","fixef"))
+model_trial_2_cont <- update(model_trial_2, start=ss,control=glmerControl(optCtrl=list(maxfun=2e4)))
+
+#trying different optimizer - nloptwrap neldermead?
 model_trial_2_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
                          Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
                          (1|date_test), data=NaCl_reshaped, family=binomial, control=glmerControl(optimizer = "nloptwrap"))
 
-summary(model_trial_2_optim) #still fails to converge, but some warnings (i.e. degenerate Hessian) gone.
+summary(model_trial_2_optim) #still fails to converge.
 
 #trying nAGQ=0 per this thread: https://stat.ethz.ch/pipermail/r-sig-mixed-models/2017q3/025802.html
-model_trial_2.1 <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
+model_trial_2_fewIt <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
                                   Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
                                   (1|date_test), data=NaCl_reshaped, nAGQ=0, family=binomial) #brute force gets rid of warning
 
-summary(model_trial_2.1)
-car::Anova(model_trial_2.1) 
+summary(model_trial_2_fewIt)
+car::Anova(model_trial_2_fewIt) 
 #gets rid warnings, but not sure this is the best approach. Will come back to it.
 
 #trying optimx - nlminb.
-model_trial_2.2_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
+model_trial_2.1_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
                                  Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
                                  (1|date_test), data=NaCl_reshaped, family=binomial, 
                                control=glmerControl(optimizer = "optimx", optCtrl = list(method="nlminb")))
 
-summary(model_trial_2.2_optim)
+summary(model_trial_2.1_optim) #warning: degenerate  Hessian with 1 negative eigenvalues
 
 #trying optimx - L-BFGS-B
-model_trial_2.3_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
+model_trial_2.2_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
                                  Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
                                  (1|date_test), data=NaCl_reshaped, family=binomial, 
                                control=glmerControl(optimizer = "optimx", optCtrl = list(method="L-BFGS-B")))
+
+summary(model_trial_2.2_optim)
+
+#trying bobyqa optimizer
+model_trial_2.3_optim <- glmer(PER ~ (Background*Allele*Treatment) + Sex + salt_conc + 
+                                 Sugar_before_salt + time + delta_pres + (1 + time + Treatment|subject) + 
+                                 (1|date_test), data=NaCl_reshaped, family=binomial, 
+                               control=glmerControl(optimizer = "nloptwrap", optCtrl = list(method="NLOPT_LN_BOBYQA")))
 
 summary(model_trial_2.3_optim)
 
