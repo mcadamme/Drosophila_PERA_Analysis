@@ -1,0 +1,53 @@
+---
+  title: "PERA_Exploratory_Data_Analysis"
+author: "Megan Fritz"
+date: "December 19, 2017"
+output: github_document
+---
+  
+  ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Loading in data sets
+```{r Code Block 1, results = "hide"}
+
+#use this to specify the path to your data file
+
+setwd("~/Dropbox/Megan/Drosophila_work/Data/pera") 
+
+#Loading data sets
+NaCl_data <- read.table("PERA_NaCl_edited.txt", header = T)
+NaCl_data <- data.frame(NaCl_data)
+
+KCl_data <- read.table("PERA_KCl.txt", header = T)
+KCl_data <- data.frame(KCl_data)
+
+```
+
+Because changes in barometric pressure are known to modulate insect behavioral responses (see Ankney 1984, Pellegrino et al. 2013), we explored the potential it had to influence gustation responses in our assays.
+
+```{r Code Block 2, results = "hide"}
+
+KCl_barom <- read.table("KCl_barom_readings.txt", header = T)
+KCl_barom$delta_pres <- (KCl_barom$pressure_6am - KCl_barom$pressure_9am)
+
+#merging barometric pressure into data sets.
+NaCl_data_pres <- merge(NaCl_data, NaCl_barom, by="date_test")
+KCl_data_pres <- merge(KCl_data, KCl_barom, by="date_test")
+
+```
+
+Our goal was to examine whether gustation responses were influenced by genetic background, scalloped allele, sex, etc.  We first visualized these relationships by plotting the average responses to each tastant (water, sugar, salt) by each of these factors.
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+  
+  ```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
