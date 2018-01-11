@@ -23,6 +23,9 @@ NaCl_data <- data.frame(NaCl_data)
 KCl_data <- read.table("PERA_KCl.txt", header = T)
 KCl_data <- data.frame(KCl_data)
 
+#loading libraries
+library(sciplot)
+
 ```
 
 Because changes in barometric pressure are known to modulate insect behavioral responses (see Ankney 1984, Pellegrino et al. 2013), we explored the potential it had to influence gustation responses in our assays.
