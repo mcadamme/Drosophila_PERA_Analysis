@@ -67,9 +67,6 @@ probos_K <- subset(KCl_data_pres, receptor == "prob")
 Average Per Fly Responses to water applied to the labellar sensilla.
 
 ``` r
-#tiff("./Output/mean_h2o_bybackground&geno2.tif", unit = "px", height = 800, width = 600)
-#par(mfrow=c(2,1))
-
 lineplot.CI(Allele, avg_h2o, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
                      ylab = "avg_h2o", ylim = c(0, 0.3), cex.lab = 1.5, 
                      col = c("blue",  "red"), 
@@ -87,9 +84,5 @@ lineplot.CI(Allele, avg_h2o, group = Background, data = probos_K, cex = 1.5, xla
 ```
 
 ![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/avg_responses-2.png)
-
-``` r
-#dev.off()
-```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
