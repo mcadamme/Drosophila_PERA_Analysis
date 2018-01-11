@@ -75,21 +75,34 @@ Average Per Fly Responses to water applied to the labellar sensilla.
 
 ```{r avg_responses, echo=TRUE}
 
+<<<<<<< HEAD
 tiff("../Output/mean_h2o_bybackground&geno2.tif", unit = "px", height = 800, width = 600)
 par(mfrow=c(2,1))
 lineplot.CI(Allele, avg_h2o, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
+=======
+avg_h20_NaClGroup <- lineplot.CI(Allele, avg_h2o, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
+>>>>>>> 0904c3de6e351cfe8638924c568ac866cafb30ae
                      ylab = "avg_h2o", ylim = c(0, 0.3), cex.lab = 1.5, 
                      col = c("blue",  "red"), 
                      pch = c(16,16,16,16,16), main="NaCl",
                      ci.fun= function(x) c(mean(x)-(1.96*(se(x))), mean(x),(1.96*se(x))))
 
+<<<<<<< HEAD
 lineplot.CI(Allele, avg_h2o, group = Background, data = probos_K, cex = 1.5, xlab = "Allele", 
+=======
+avg_h20_KClGroup <- lineplot.CI(Allele, avg_h2o, group = Background, data = probos_K, cex = 1.5, xlab = "Allele", 
+>>>>>>> 0904c3de6e351cfe8638924c568ac866cafb30ae
                      ylab = "avg_h2o", ylim = c(0, 0.3), cex.lab = 1.5, 
                      col = c("blue", "red"), pch = c(16,16,16,16), main = "KCl",
                      ci.fun= function(x) c(mean(x)-(1.96*(se(x))), mean(x)+(1.96*se(x))))
 
+<<<<<<< HEAD
 dev.off()
 
+=======
+print(avg_h20_NaClGroup)
+print(avg_h20_KClGroup)
+>>>>>>> 0904c3de6e351cfe8638924c568ac866cafb30ae
 
 ```
 
