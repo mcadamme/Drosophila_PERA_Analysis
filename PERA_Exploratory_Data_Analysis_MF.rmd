@@ -79,8 +79,8 @@ Average Per Fly Responses to water applied to the labellar sensilla.
 ```{r avg_responses, echo=TRUE}
 
 
-tiff("./Output/mean_h2o_bybackground&geno2.tif", unit = "px", height = 800, width = 600)
-par(mfrow=c(2,1))
+#tiff("./Output/mean_h2o_bybackground&geno2.tif", unit = "px", height = 800, width = 600)
+#par(mfrow=c(2,1))
 
 lineplot.CI(Allele, avg_h2o, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
                      ylab = "avg_h2o", ylim = c(0, 0.3), cex.lab = 1.5, 
@@ -94,7 +94,7 @@ lineplot.CI(Allele, avg_h2o, group = Background, data = probos_K, cex = 1.5, xla
                      col = c("blue", "red"), pch = c(16,16,16,16), main = "KCl",
                      ci.fun= function(x) c(mean(x)-(1.96*(se(x))), mean(x)+(1.96*se(x))))
 
-dev.off()
+#dev.off()
 
 
 ```
