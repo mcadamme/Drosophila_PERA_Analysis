@@ -9,8 +9,9 @@
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Loading in data sets
-```{r Code Block 1, results = "hide"}
+Start by loading in data sets and libraries.
+
+```{r Loading data sets and libraries, results = "hide"}
 
 #use this to specify the path to your data file
 
@@ -30,7 +31,7 @@ library(sciplot)
 
 Because changes in barometric pressure are known to modulate insect behavioral responses (see Ankney 1984, Pellegrino et al. 2013), we explored the potential it had to influence gustation responses in our assays.
 
-```{r Code Block 2, results = "hide"}
+```{r Adding barometric pressure datasets, results = "hide"}
 
 NaCl_barom <- read.table("./Data/pera/NaCl_barom_readings.txt", header = T)
 NaCl_barom$delta_pres <- (NaCl_barom$pressure_6am - NaCl_barom$pressure_9am)
@@ -46,7 +47,7 @@ KCl_data_pres <- merge(KCl_data, KCl_barom, by="date_test")
 
 Our goal was to examine whether gustation responses were influenced by genetic background, scalloped allele, sex, etc.  We first visualized these relationships by plotting average fly responses to each tastant (water, sugar, salt) by each of these factors.
 
-```{r Code Block 3, results = "hide"}
+```{r Average Response block, results = "hide"}
 
 #Getting average response per fly to each stimulus
 #NaCl
@@ -74,22 +75,46 @@ probos_K <- subset(KCl_data_pres, receptor == "prob")
 
 ```
 
-Average Per Fly Responses to water applied to the labellar sensilla.
+Here I generated a custom bootstrap function that can be used in our plot of average responses to each tastant: water, sugar, and salt.
+
+```{r custom bootstrap function, echo=TRUE}
+
+#writing bootstrapped 95% CI function
+boot.fn <- function(x, N=5000) {
+  Int.1 <- replicate(N, mean(sample(x, size= length(x), replace=T)))
+  Int.CI <- quantile(Int.1, probs=c(0.025,0.975))
+  Int.CI
+}
+```
+
+Then I applied the mean and bootstrap functions to my dataset to calculate and plot average per fly response to water when applied to the labellar sensilla. Note that the plots allow us to visualize whether there is an interaction between allele and genetic background.  Responses to water are plotted separately for each of two experiments - one where the aversive tastant was NaCl and another where the aversive tastant was KCl.
 
 ```{r avg_responses, echo=TRUE}
+#printing overall means and CIs
+mean.avg_h2o.NaCl <- tapply(probos_N$avg_h2o, probos_N$Allele, mean)
+CI.avg_h2o.NaCl <- tapply(probos_N$avg_h2o, probos_N$Allele, boot.fn)
+mean.avg_h2o.NaCl
+CI.avg_h2o.NaCl
 
 
+#Plot to view interactions between background and allele for water responses in NaCl assay
 lineplot.CI(Allele, avg_h2o, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
                      ylab = "avg_h2o", ylim = c(0, 0.3), cex.lab = 1.5, 
                      col = c("blue",  "red"), 
-                     pch = c(16,16,16,16,16), main="NaCl",
-                     ci.fun= function(x) c(mean(x)-(1.96*(se(x))), mean(x),(1.96*se(x))))
+                     pch = c(16,16,16,16,16),
+                     ci.fun= boot.fn)
 
+#printing overall means and CIs
+mean.avg_h2o.KCl <- tapply(probos_K$avg_h2o, probos_K$Allele, mean)
+CI.avg_h2o.KCl <- tapply(probos_K$avg_h2o, probos_K$Allele, boot.fn)
+mean.avg_h2o.KCl
+CI.avg_h2o.KCl
 
+#Plot to view interactions between background and allele for water responses in KCl assay
 lineplot.CI(Allele, avg_h2o, group = Background, data = probos_K, cex = 1.5, xlab = "Allele", 
                      ylab = "avg_h2o", ylim = c(0, 0.3), cex.lab = 1.5, 
-                     col = c("blue", "red"), pch = c(16,16,16,16), main = "KCl",
-                     ci.fun= function(x) c(mean(x)-(1.96*(se(x))), mean(x)+(1.96*se(x))))
+                     col = c("blue", "red"), pch = c(16,16,16,16),
+                     ci.fun= boot.fn)
 
 
 ```

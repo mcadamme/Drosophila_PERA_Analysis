@@ -3,8 +3,7 @@ PERA\_Exploratory\_Data\_Analysis
 Megan Fritz
 December 19, 2017
 
-Loading in data sets
-====================
+Start by loading in data sets and libraries.
 
 ``` r
 #use this to specify the path to your data file
@@ -64,23 +63,104 @@ probos_N <- subset(NaCl_data_pres, receptor == "prob")
 probos_K <- subset(KCl_data_pres, receptor == "prob")
 ```
 
-Average Per Fly Responses to water applied to the labellar sensilla.
+Here I generated a custom bootstrap function that can be used in our plot of average responses to each tastant: water, sugar, and salt.
 
 ``` r
+#writing bootstrapped 95% CI function
+boot.fn <- function(x, N=5000) {
+  Int.1 <- replicate(N, mean(sample(x, size= length(x), replace=T)))
+  Int.CI <- quantile(Int.1, probs=c(0.025,0.975))
+  Int.CI
+}
+```
+
+Then I applied the mean and bootstrap functions to my dataset to calculate and plot average per fly response to water when applied to the labellar sensilla. Note that the plots allow us to visualize whether there is an interaction between allele and genetic background. Responses to water are plotted separately for each of two experiments - one where the aversive tastant was NaCl and another where the aversive tastant was KCl.
+
+``` r
+#printing overall means and CIs
+mean.avg_h2o.NaCl <- tapply(probos_N$avg_h2o, probos_N$Allele, mean)
+CI.avg_h2o.NaCl <- tapply(probos_N$avg_h2o, probos_N$Allele, boot.fn)
+mean.avg_h2o.NaCl
+```
+
+    ##        58d       etx4        sd1       sde3         wt 
+    ## 0.06666667 0.07342144 0.06565657 0.08303887 0.07166667
+
+``` r
+CI.avg_h2o.NaCl
+```
+
+    ## $`58d`
+    ##       2.5%      97.5% 
+    ## 0.02777778 0.11111111 
+    ## 
+    ## $etx4
+    ##       2.5%      97.5% 
+    ## 0.05139501 0.09838473 
+    ## 
+    ## $sd1
+    ##       2.5%      97.5% 
+    ## 0.04377104 0.08922559 
+    ## 
+    ## $sde3
+    ##       2.5%      97.5% 
+    ## 0.05946702 0.10777385 
+    ## 
+    ## $wt
+    ##       2.5%      97.5% 
+    ## 0.05777778 0.08666667
+
+``` r
+#Plot to view interactions between background and allele for water responses in NaCl assay
 lineplot.CI(Allele, avg_h2o, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
                      ylab = "avg_h2o", ylim = c(0, 0.3), cex.lab = 1.5, 
                      col = c("blue",  "red"), 
-                     pch = c(16,16,16,16,16), main="NaCl",
-                     ci.fun= function(x) c(mean(x)-(1.96*(se(x))), mean(x),(1.96*se(x))))
+                     pch = c(16,16,16,16,16),
+                     ci.fun= boot.fn)
 ```
 
 ![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/avg_responses-1.png)
 
 ``` r
+#printing overall means and CIs
+mean.avg_h2o.KCl <- tapply(probos_K$avg_h2o, probos_K$Allele, mean)
+CI.avg_h2o.KCl <- tapply(probos_K$avg_h2o, probos_K$Allele, boot.fn)
+mean.avg_h2o.KCl
+```
+
+    ##        58d       etx4        sd1       sde3         wt 
+    ## 0.07751938 0.09696970 0.09929078 0.08983452 0.08981380
+
+``` r
+CI.avg_h2o.KCl
+```
+
+    ## $`58d`
+    ##       2.5%      97.5% 
+    ## 0.04651163 0.11240310 
+    ## 
+    ## $etx4
+    ##       2.5%      97.5% 
+    ## 0.06666667 0.13030303 
+    ## 
+    ## $sd1
+    ##       2.5%      97.5% 
+    ## 0.07328605 0.12647754 
+    ## 
+    ## $sde3
+    ##       2.5%      97.5% 
+    ## 0.06619385 0.11583924 
+    ## 
+    ## $wt
+    ##       2.5%      97.5% 
+    ## 0.07667032 0.10332238
+
+``` r
+#Plot to view interactions between background and allele for water responses in KCl assay
 lineplot.CI(Allele, avg_h2o, group = Background, data = probos_K, cex = 1.5, xlab = "Allele", 
                      ylab = "avg_h2o", ylim = c(0, 0.3), cex.lab = 1.5, 
-                     col = c("blue", "red"), pch = c(16,16,16,16), main = "KCl",
-                     ci.fun= function(x) c(mean(x)-(1.96*(se(x))), mean(x)+(1.96*se(x))))
+                     col = c("blue", "red"), pch = c(16,16,16,16),
+                     ci.fun= boot.fn)
 ```
 
 ![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/avg_responses-2.png)
