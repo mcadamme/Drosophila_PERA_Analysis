@@ -194,5 +194,57 @@ lineplot.CI(Allele, avg_salt, group = Background, data = probos_K, cex = 1.5, xl
 
 This final plot, in particular suggested that responses to KCl were higher for individuals bearing the sde3 and sdetx4 alleles in the SAM background relative to SAM wt.  More interestingly, KCl responses were not elevated in individuals bearing the sde3 and sdetx4 alleles in the ORE background relative to the ORE wt.
 
+#Effects of salt concentration on salt response rate.
 
+For each of the two experiments where NaCl and KCl was applied to the labellar sensilla, we used two different salt concentrations - 100mM and 500mM for each salt.  Here we plotted the effects of these salt concentrations, first for NaCl and then KCl response rates.
+
+#NaCl response rates for each concentration
+
+```{r responses_by_NaCl_conc, echo=TRUE}
+
+#subsetting by NaCl concentration, and plotting salt response means (+/-95% CIs) for each subset.
+NaCl100 <- subset(probos_N, salt_conc == 100)
+NaCl500 <- subset(probos_N, salt_conc == 500)
+
+#plotting salt responses
+lineplot.CI(Background, avg_salt, group = Allele, data = NaCl100, cex = 1.5, xlab = "Background", 
+            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16), main = "100mM",
+            ci.fun= boot.fn)
+
+lineplot.CI(Background, avg_salt, group = Allele, data = NaCl500, cex = 1.5, xlab = "Background", 
+            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16), main = "500mM",
+            ci.fun= boot.fn)
+
+```
+
+In this second plot, when NaCl concentrations were higher, individuals bearing the sde3 allele were more likely to respond if they had a SAM genetic background relative to those with the ORE genetic background.  This effect was really only seen at the higher concentration of NaCl.
+
+#KCl response rates for each concentration
+
+```{r responses_by_KCl_conc, echo=TRUE}
+
+
+KCl100 <- subset(probos_K, salt_conc == 100)
+KCl500 <- subset(probos_K, salt_conc == 500)
+
+lineplot.CI(Background, avg_salt, group = Allele, data = KCl100, cex = 1.5, xlab = "Background", 
+            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16),
+            main = "100mM",
+            ci.fun= boot.fn)
+
+lineplot.CI(Background, avg_salt, group = Allele, data = KCl500, cex = 1.5, xlab = "Background", 
+            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16),
+            main = "500mM",
+            ci.fun= boot.fn)
+
+```
+
+When KCl was used as the aversive tastant, individuals bearing the sde3 and sdetx4 allele were most likely to respond if they had a SAM genetic background, and this effect was most apparent at lower concentrations of KCl.
+#Differences between male and female responses
+
+To identify whether there were any differences between male and female
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

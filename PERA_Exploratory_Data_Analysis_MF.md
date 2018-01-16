@@ -109,7 +109,7 @@ CI.avg_h2o.NaCl
     ## 
     ## $etx4
     ##       2.5%      97.5% 
-    ## 0.07048458 0.11747430 
+    ## 0.07048458 0.11600587 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
@@ -117,11 +117,11 @@ CI.avg_h2o.NaCl
     ## 
     ## $sde3
     ##       2.5%      97.5% 
-    ## 0.08892815 0.14369847 
+    ## 0.08775029 0.14310954 
     ## 
     ## $wt
     ##       2.5%      97.5% 
-    ## 0.05305556 0.08056250
+    ## 0.05361111 0.08111806
 
 ``` r
 #Plot to view interactions between background and allele for water responses in NaCl assay
@@ -154,19 +154,19 @@ CI.avg_h2o.KCl
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.1060606 0.1696970 
+    ## 0.1075758 0.1727273 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.1039894 0.1654846 
+    ## 0.1040189 0.1654846 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.1205674 0.1855792 
+    ## 0.1193853 0.1867612 
     ## 
     ## $wt
     ##       2.5%      97.5% 
-    ## 0.04381161 0.06389193
+    ## 0.04417671 0.06425703
 
 ``` r
 #Plot to view interactions between background and allele for water responses in KCl assay
@@ -196,24 +196,24 @@ CI.avg_sug.NaCl
 ```
 
     ## $`58d`
-    ##      2.5%     97.5% 
-    ## 0.2583333 0.4500000 
+    ##  2.5% 97.5% 
+    ##  0.25  0.45 
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.3370044 0.4471366 
+    ## 0.3370044 0.4449890 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.5429293 0.6540404 
+    ## 0.5404040 0.6540404 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.5123675 0.6148410 
+    ## 0.5123675 0.6130742 
     ## 
     ## $wt
     ##      2.5%     97.5% 
-    ## 0.2925000 0.3566667
+    ## 0.2933125 0.3558333
 
 ``` r
 #Plot to view interactions between background and allele for sugar responses in NaCl assay
@@ -246,15 +246,15 @@ CI.avg_sug.KCl
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.5727273 0.6795455 
+    ## 0.5750000 0.6795455 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.4698582 0.5691489 
+    ## 0.4680851 0.5691489 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.5407801 0.6365248 
+    ## 0.5425532 0.6365248 
     ## 
     ## $wt
     ##      2.5%     97.5% 
@@ -288,12 +288,12 @@ CI.avg_salt.NaCl
 ```
 
     ## $`58d`
-    ##  2.5% 97.5% 
-    ## 0.075 0.250 
+    ##       2.5%      97.5% 
+    ## 0.08333333 0.24166667 
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.2202643 0.3149780 
+    ## 0.2180617 0.3149780 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
@@ -301,7 +301,7 @@ CI.avg_salt.NaCl
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.3286219 0.4293286 
+    ## 0.3286219 0.4310954 
     ## 
     ## $wt
     ##      2.5%     97.5% 
@@ -334,7 +334,7 @@ CI.avg_salt.KCl
 
     ## $`58d`
     ##     2.5%    97.5% 
-    ## 0.127907 0.250000 
+    ## 0.127907 0.244186 
     ## 
     ## $etx4
     ##      2.5%     97.5% 
@@ -342,15 +342,15 @@ CI.avg_salt.KCl
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.1187943 0.1914894 
+    ## 0.1187943 0.1932624 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.2854610 0.3865248 
+    ## 0.2890071 0.3865248 
     ## 
     ## $wt
     ##       2.5%      97.5% 
-    ## 0.04600219 0.07064622
+    ## 0.04654984 0.07009858
 
 ``` r
 #Plot to view interactions between background and allele for salt responses in KCl assay
@@ -362,4 +362,71 @@ lineplot.CI(Allele, avg_salt, group = Background, data = probos_K, cex = 1.5, xl
 
 ![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/avg_salt_responses-2.png)
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+This final plot, in particular suggested that responses to KCl were higher for individuals bearing the sde3 and sdetx4 alleles in the SAM background relative to SAM wt. More interestingly, KCl responses were not elevated in individuals bearing the sde3 and sdetx4 alleles in the ORE background relative to the ORE wt.
+
+Effects of salt concentration on salt response rate.
+====================================================
+
+For each of the two experiments where NaCl and KCl was applied to the labellar sensilla, we used two different salt concentrations - 100mM and 500mM for each salt. Here we plotted the effects of these salt concentrations, first for NaCl and then KCl response rates.
+
+NaCl response rates for each concentration
+==========================================
+
+``` r
+#subsetting by NaCl concentration, and plotting salt response means (+/-95% CIs) for each subset.
+NaCl100 <- subset(probos_N, salt_conc == 100)
+NaCl500 <- subset(probos_N, salt_conc == 500)
+
+#plotting salt responses
+lineplot.CI(Background, avg_salt, group = Allele, data = NaCl100, cex = 1.5, xlab = "Background", 
+            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16), main = "100mM",
+            ci.fun= boot.fn)
+```
+
+![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/responses_by_NaCl_conc-1.png)
+
+``` r
+lineplot.CI(Background, avg_salt, group = Allele, data = NaCl500, cex = 1.5, xlab = "Background", 
+            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16), main = "500mM",
+            ci.fun= boot.fn)
+```
+
+![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/responses_by_NaCl_conc-2.png)
+
+In this second plot, when NaCl concentrations were higher, individuals bearing the sde3 allele were more likely to respond if they had a SAM genetic background relative to those with the ORE genetic background. This effect was really only seen at the higher concentration of NaCl.
+
+KCl response rates for each concentration
+=========================================
+
+``` r
+KCl100 <- subset(probos_K, salt_conc == 100)
+KCl500 <- subset(probos_K, salt_conc == 500)
+
+lineplot.CI(Background, avg_salt, group = Allele, data = KCl100, cex = 1.5, xlab = "Background", 
+            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16),
+            main = "100mM",
+            ci.fun= boot.fn)
+```
+
+![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/responses_by_KCl_conc-1.png)
+
+``` r
+lineplot.CI(Background, avg_salt, group = Allele, data = KCl500, cex = 1.5, xlab = "Background", 
+            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16),
+            main = "500mM",
+            ci.fun= boot.fn)
+```
+
+    ## Warning in arrows(leg.vals$xvals[CI.seln], CI.plot[, 1], leg.vals
+    ## $xvals[CI.seln], : zero-length arrow is of indeterminate angle and so
+    ## skipped
+
+![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/responses_by_KCl_conc-2.png)
+
+When KCl was used as the aversive tastant, individuals bearing the sde3 and sdetx4 allele were most likely to respond if they had a SAM genetic background, and this effect was most apparent at lower concentrations of KCl. \#Differences between male and female responses
+
+To identify whether there were any differences between male and female Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
