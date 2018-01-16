@@ -9,7 +9,7 @@
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Start by loading in data sets and libraries.
+#Loading in data sets and libraries.
 
 ```{r Loading data sets and libraries, results = "hide"}
 
@@ -29,7 +29,8 @@ library(sciplot)
 
 ```
 
-Because changes in barometric pressure are known to modulate insect behavioral responses (see Ankney 1984, Pellegrino et al. 2013), we explored the potential it had to influence gustation responses in our assays.
+#Adding barometric pressure data
+Because changes in barometric pressure are known to modulate insect behavioral responses (see Ankney 1984, Pellegrino et al. 2013), we explored the potential it had to influence gustation responses in our assays.  These data were obtained from the weather underground historical data archive (http://www.wunderground.com/history) for Lansing, MI.
 
 ```{r Adding barometric pressure datasets, results = "hide"}
 
@@ -45,7 +46,10 @@ KCl_data_pres <- merge(KCl_data, KCl_barom, by="date_test")
 
 ```
 
-Our goal was to examine whether gustation responses were influenced by genetic background, scalloped allele, sex, etc.  We first visualized these relationships by plotting average fly responses to each tastant (water, sugar, salt) by each of these factors.
+
+#Calculating average per fly responses
+
+Our goal was to examine whether gustation responses were influenced by genetic background, scalloped allele, sex, etc.  We first visualized these relationships by plotting average fly responses to each tastant (water, sugar, salt) by each of these factors.  We first had to generate these average responses per fly for each of two experiments targeting the labellar sensilla - one where the aversive salt tastant was NaCl and another where the salt was KCl.
 
 ```{r Average Response block, results = "hide"}
 
@@ -55,18 +59,18 @@ NaCl_data_pres[24:25, "avg_h2o"] <- NA
 NaCl_data_pres[25:26, "avg_sugar"] <- NA
 NaCl_data_pres[26:27, "avg_salt"] <- NA
 
-NaCl_data_pres <- transform(NaCl_data_pres, avg_h2o = rowMeans(NaCl_data[, c(7, 10, 13)], na.rm = TRUE))
-NaCl_data_pres <- transform(NaCl_data_pres, avg_sugar = rowMeans(NaCl_data[, c(8,11)], na.rm = TRUE))
-NaCl_data_pres <- transform(NaCl_data_pres, avg_salt = rowMeans(NaCl_data[, c(9,12)], na.rm = TRUE))
+NaCl_data_pres <- transform(NaCl_data_pres, avg_h2o = rowMeans(NaCl_data_pres[, c(7, 10, 13)], na.rm = TRUE))
+NaCl_data_pres <- transform(NaCl_data_pres, avg_sugar = rowMeans(NaCl_data_pres[, c(8,11)], na.rm = TRUE))
+NaCl_data_pres <- transform(NaCl_data_pres, avg_salt = rowMeans(NaCl_data_pres[, c(9,12)], na.rm = TRUE))
 
 #KCl
 KCl_data_pres[24:25, "avg_h2o"] <- NA
 KCl_data_pres[25:26, "avg_sugar"] <- NA
 KCl_data_pres[26:27, "avg_salt"] <- NA
 
-KCl_data_pres <- transform(KCl_data_pres, avg_h2o = rowMeans(KCl_data[, c(7, 10, 13)], na.rm = TRUE))
-KCl_data_pres <- transform(KCl_data_pres, avg_sugar = rowMeans(KCl_data[, c(8,11)], na.rm = TRUE))
-KCl_data_pres <- transform(KCl_data_pres, avg_salt = rowMeans(KCl_data[, c(9,12)], na.rm = TRUE))
+KCl_data_pres <- transform(KCl_data_pres, avg_h2o = rowMeans(KCl_data_pres[, c(7, 10, 13)], na.rm = TRUE))
+KCl_data_pres <- transform(KCl_data_pres, avg_sugar = rowMeans(KCl_data_pres[, c(8,11)], na.rm = TRUE))
+KCl_data_pres <- transform(KCl_data_pres, avg_salt = rowMeans(KCl_data_pres[, c(9,12)], na.rm = TRUE))
 
 
 ###First looking at avg responses by individuals tested using labellar receptors
@@ -75,7 +79,7 @@ probos_K <- subset(KCl_data_pres, receptor == "prob")
 
 ```
 
-Here I generated a custom bootstrap function that can be used in our plot of average responses to each tastant: water, sugar, and salt.
+The bootstrap function used to generate CIs around average responses to each tastant (water, sugar, and salt) in the following plots.
 
 ```{r custom bootstrap function, echo=TRUE}
 
@@ -87,9 +91,13 @@ boot.fn <- function(x, N=5000) {
 }
 ```
 
-Then I applied the mean and bootstrap functions to my dataset to calculate and plot average per fly response to water when applied to the labellar sensilla. Note that the plots allow us to visualize whether there is an interaction between allele and genetic background.  Responses to water are plotted separately for each of two experiments - one where the aversive tastant was NaCl and another where the aversive tastant was KCl.
+#Plotting average per fly responses
 
-```{r avg_responses, echo=TRUE}
+Then I applied the mean and bootstrap functions to my dataset to calculate and plot average per fly response to each tastant (water, sugar, then salt) when applied to the labellar sensilla. Note that the plots allow us to visualize whether there is an interaction between allele and genetic background.  Responses to each tastant are plotted separately for NaCl and KCl experiments.
+
+
+#Mean water response rates (2.5, 97.5% CIs)
+```{r avg_water_responses, echo=TRUE}
 #printing overall means and CIs
 mean.avg_h2o.NaCl <- tapply(probos_N$avg_h2o, probos_N$Allele, mean)
 CI.avg_h2o.NaCl <- tapply(probos_N$avg_h2o, probos_N$Allele, boot.fn)
@@ -99,7 +107,7 @@ CI.avg_h2o.NaCl
 
 #Plot to view interactions between background and allele for water responses in NaCl assay
 lineplot.CI(Allele, avg_h2o, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
-                     ylab = "avg_h2o", ylim = c(0, 0.3), cex.lab = 1.5, 
+                     ylab = "avg_h2o_resp", ylim = c(0, 0.3), cex.lab = 1.5, 
                      col = c("blue",  "red"), 
                      pch = c(16,16,16,16,16),
                      ci.fun= boot.fn)
@@ -112,11 +120,79 @@ CI.avg_h2o.KCl
 
 #Plot to view interactions between background and allele for water responses in KCl assay
 lineplot.CI(Allele, avg_h2o, group = Background, data = probos_K, cex = 1.5, xlab = "Allele", 
-                     ylab = "avg_h2o", ylim = c(0, 0.3), cex.lab = 1.5, 
+                     ylab = "avg_h2o_resp", ylim = c(0, 0.3), cex.lab = 1.5, 
                      col = c("blue", "red"), pch = c(16,16,16,16),
                      ci.fun= boot.fn)
 
 
 ```
+
+
+#Mean sugar response rates (2.5, 97.5% CIs)
+```{r avg_sugar_responses, echo=TRUE}
+
+#printing overall means and CIs
+mean.avg_sug.NaCl <- tapply(probos_N$avg_sugar, probos_N$Allele, mean)
+CI.avg_sug.NaCl <- tapply(probos_N$avg_sugar, probos_N$Allele, boot.fn)
+mean.avg_sug.NaCl
+CI.avg_sug.NaCl
+
+
+#Plot to view interactions between background and allele for sugar responses in NaCl assay
+lineplot.CI(Allele, avg_sugar, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
+                     ylab = "avg_sugar_resp", ylim = c(0, 0.8), cex.lab = 1.5, 
+                     col = c("blue",  "red"), 
+                     pch = c(16,16,16,16,16),
+                     ci.fun= boot.fn)
+
+#printing overall means and CIs
+mean.avg_sug.KCl <- tapply(probos_K$avg_sugar, probos_K$Allele, mean)
+CI.avg_sug.KCl <- tapply(probos_K$avg_sugar, probos_K$Allele, boot.fn)
+mean.avg_sug.KCl
+CI.avg_sug.KCl
+
+#Plot to view interactions between background and allele for sugar responses in KCl assay
+lineplot.CI(Allele, avg_sugar, group = Background, data = probos_K, cex = 1.5, xlab = "Allele", 
+                     ylab = "avg_sugar_resp", ylim = c(0, 0.8), cex.lab = 1.5, 
+                     col = c("blue", "red"), pch = c(16,16,16,16),
+                     ci.fun= boot.fn)
+
+
+```
+
+#Mean salt response rates (2.5, 97.5% CIs)
+```{r avg_salt_responses, echo=TRUE}
+
+#printing overall means and CIs
+mean.avg_salt.NaCl <- tapply(probos_N$avg_salt, probos_N$Allele, mean)
+CI.avg_salt.NaCl <- tapply(probos_N$avg_salt, probos_N$Allele, boot.fn)
+mean.avg_salt.NaCl
+CI.avg_salt.NaCl
+
+
+#Plot to view interactions between background and allele for salt responses in NaCl assay
+lineplot.CI(Allele, avg_salt, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
+                     ylab = "avg_salt_resp", ylim = c(0, 0.8), cex.lab = 1.5, 
+                     col = c("blue",  "red"), 
+                     pch = c(16,16,16,16,16),
+                     ci.fun= boot.fn)
+
+#printing overall means and CIs
+mean.avg_salt.KCl <- tapply(probos_K$avg_salt, probos_K$Allele, mean)
+CI.avg_salt.KCl <- tapply(probos_K$avg_salt, probos_K$Allele, boot.fn)
+mean.avg_salt.KCl
+CI.avg_salt.KCl
+
+#Plot to view interactions between background and allele for salt responses in KCl assay
+lineplot.CI(Allele, avg_salt, group = Background, data = probos_K, cex = 1.5, xlab = "Allele", 
+                     ylab = "avg_salt_resp", ylim = c(0, 0.8), cex.lab = 1.5, 
+                     col = c("blue", "red"), pch = c(16,16,16,16),
+                     ci.fun= boot.fn)
+
+
+```
+
+This final plot, in particular suggested that responses to KCl were higher for individuals bearing the sde3 and sdetx4 alleles in the SAM background relative to SAM wt.  More interestingly, KCl responses were not elevated in individuals bearing the sde3 and sdetx4 alleles in the ORE background relative to the ORE wt.
+
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
