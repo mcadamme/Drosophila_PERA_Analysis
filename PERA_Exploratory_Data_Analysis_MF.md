@@ -70,16 +70,27 @@ probos_N <- subset(NaCl_data_pres, receptor == "prob")
 probos_K <- subset(KCl_data_pres, receptor == "prob")
 ```
 
-The bootstrap function used to generate CIs around average responses to each tastant (water, sugar, and salt) in the following plots.
+Visualizing the effects of pressure changes on response rates
+=============================================================
+
+We started by looking at how these average responses to each tastant were impacted by changes in barometric pressure by regressing response on delta\_pres.
 
 ``` r
-#writing bootstrapped 95% CI function
-boot.fn <- function(x, N=5000) {
-  Int.1 <- replicate(N, mean(sample(x, size= length(x), replace=T)))
-  Int.CI <- quantile(Int.1, probs=c(0.025,0.975))
-  Int.CI
-}
+#NaCl experiment first
+par(mfrow=c(2,3))
+plot(jitter(probos_N$avg_h2o)~jitter(probos_N$delta_pres), ylab = "avg_water", xlab = "delta BP")
+plot(jitter(probos_N$avg_sugar)~jitter(probos_N$delta_pres), ylab = "avg_sugar", xlab = "delta BP")
+plot(jitter(probos_N$avg_salt)~jitter(probos_N$delta_pres), ylab = "avg_nacl", xlab = "delta BP")
+
+#KCl experiment next
+plot(jitter(probos_K$avg_h2o)~jitter(probos_K$delta_pres), ylab = "avg_water", xlab = "delta BP")
+plot(jitter(probos_K$avg_sugar)~jitter(probos_K$delta_pres), ylab = "avg_sugar", xlab = "delta BP")
+plot(jitter(probos_K$avg_salt)~jitter(probos_K$delta_pres), ylab = "avg_sugar", xlab = "delta BP")
 ```
+
+<img src="PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/plots_delta_pres-1.png" style="display: block; margin: auto;" />
+
+If any trend exists in these plots, it is that large changes in barometric pressure potentially lead to slightly lower response rates overall - to any tastant.
 
 Plotting average per fly responses
 ==================================
@@ -92,6 +103,13 @@ Mean water response rates (2.5, 97.5% CIs)
 ==========================================
 
 ``` r
+#writing bootstrapped 95% CI function
+boot.fn <- function(x, N=5000) {
+  Int.1 <- replicate(N, mean(sample(x, size= length(x), replace=T)))
+  Int.CI <- quantile(Int.1, probs=c(0.025,0.975))
+  Int.CI
+}
+
 #printing overall means and CIs
 mean.avg_h2o.NaCl <- tapply(probos_N$avg_h2o, probos_N$Allele, mean)
 CI.avg_h2o.NaCl <- tapply(probos_N$avg_h2o, probos_N$Allele, boot.fn)
@@ -119,11 +137,11 @@ CI.avg_h2o.NaCl
     ## 
     ## $sde3
     ##       2.5%      97.5% 
-    ## 0.08833922 0.14194641 
+    ## 0.08775029 0.14310954 
     ## 
     ## $wt
     ##       2.5%      97.5% 
-    ## 0.05333333 0.08027778
+    ## 0.05361111 0.08138889
 
 ``` r
 #Plot to view interactions between background and allele for water responses in NaCl assay
@@ -156,7 +174,7 @@ CI.avg_h2o.KCl
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.1075758 0.1712121 
+    ## 0.1075758 0.1696970 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
@@ -168,7 +186,7 @@ CI.avg_h2o.KCl
     ## 
     ## $wt
     ##       2.5%      97.5% 
-    ## 0.04381161 0.06425703
+    ## 0.04381161 0.06389193
 
 ``` r
 #Plot to view interactions between background and allele for water responses in KCl assay
@@ -198,24 +216,24 @@ CI.avg_sug.NaCl
 ```
 
     ## $`58d`
-    ##  2.5% 97.5% 
-    ##  0.25  0.45 
+    ##      2.5%     97.5% 
+    ## 0.2583333 0.4500000 
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.3414097 0.4471366 
+    ## 0.3392070 0.4471916 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.5404040 0.6540404 
+    ## 0.5429293 0.6540404 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.5141343 0.6148410 
+    ## 0.5159011 0.6130742 
     ## 
     ## $wt
     ##      2.5%     97.5% 
-    ## 0.2916667 0.3558542
+    ## 0.2933333 0.3566667
 
 ``` r
 #Plot to view interactions between background and allele for sugar responses in NaCl assay
@@ -244,7 +262,7 @@ CI.avg_sug.KCl
 
     ## $`58d`
     ##      2.5%     97.5% 
-    ## 0.2732558 0.4418605 
+    ## 0.2674419 0.4418605 
     ## 
     ## $etx4
     ##      2.5%     97.5% 
@@ -252,15 +270,15 @@ CI.avg_sug.KCl
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.4680851 0.5691489 
+    ## 0.4698582 0.5691489 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.5407358 0.6365248 
+    ## 0.5407801 0.6365248 
     ## 
     ## $wt
     ##      2.5%     97.5% 
-    ## 0.2935378 0.3472070
+    ## 0.2940854 0.3466594
 
 ``` r
 #Plot to view interactions between background and allele for sugar responses in KCl assay
@@ -290,8 +308,8 @@ CI.avg_salt.NaCl
 ```
 
     ## $`58d`
-    ##       2.5%      97.5% 
-    ## 0.08333333 0.24166667 
+    ##     2.5%    97.5% 
+    ## 0.083125 0.250000 
     ## 
     ## $etx4
     ##      2.5%     97.5% 
@@ -299,7 +317,7 @@ CI.avg_salt.NaCl
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.3409091 0.4621212 
+    ## 0.3409091 0.4595960 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
@@ -307,7 +325,7 @@ CI.avg_salt.NaCl
     ## 
     ## $wt
     ##      2.5%     97.5% 
-    ## 0.1091667 0.1541667
+    ## 0.1083333 0.1541667
 
 ``` r
 #Plot to view interactions between background and allele for salt responses in NaCl assay
@@ -344,7 +362,7 @@ CI.avg_salt.KCl
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.1170213 0.1914894 
+    ## 0.1187943 0.1914894 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
@@ -467,7 +485,7 @@ lineplot.CI(Allele, avg_sugar, group = Background, data = NaCl_f, cex = 1.5, xla
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_salt, group = Background, data = NaCl_m, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_NaCl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_nacl", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "NaCl Response by Males",
             ci.fun= boot.fn)
@@ -479,7 +497,7 @@ lineplot.CI(Allele, avg_salt, group = Background, data = NaCl_m, cex = 1.5, xlab
 
 ``` r
 lineplot.CI(Allele, avg_salt, group = Background, data = NaCl_f, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_NaCl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_nacl", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "NaCl Response by Females",
             ci.fun= boot.fn)
@@ -524,18 +542,21 @@ lineplot.CI(Allele, avg_sugar, group = Background, data = KCl_f, cex = 1.5, xlab
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_salt, group = Background, data = KCl_m, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_KCl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_kcl", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "KCl Response by Males",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_salt, group = Background, data = KCl_f, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_KCl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_kcl", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "KCl Response by Females",
             ci.fun= boot.fn)
 ```
 
 <img src="PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/KCl_responses_by_sex_figs-1.png" style="display: block; margin: auto;" />
+
+Visualizing the effects of pressure changes on response rates
+=============================================================
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

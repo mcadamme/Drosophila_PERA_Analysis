@@ -30,9 +30,9 @@ library(sciplot)
 ```
 
 #Adding barometric pressure data
-Because changes in barometric pressure are known to modulate insect behavioral responses (see Ankney 1984, Pellegrino et al. 2013), we explored the potential it had to influence gustation responses in our assays.  These data were obtained from the weather underground historical data archive (http://www.wunderground.com/history) for Lansing, MI.
+Because changes in barometric pressure are known to modulate insect behavioral responses (see Ankney 1984, Pellegrino et al. 2013), we explored the potential it had to influence gustation responses in our assays.  These data were obtained from the weather underground historical data archive (http://www.wunderground.com/history) for Lansing, MI. 
 
-```{r Adding barometric pressure datasets, results = "hide"}
+```{r Adding barometric pressure datasets, results = "hide", fig.height = 8, fig.width = 8, fig.align = "center"}
 
 NaCl_barom <- read.table("./Data/pera/NaCl_barom_readings.txt", header = T)
 NaCl_barom$delta_pres <- (NaCl_barom$pressure_6am - NaCl_barom$pressure_9am)
@@ -43,6 +43,8 @@ KCl_barom$delta_pres <- (KCl_barom$pressure_6am - KCl_barom$pressure_9am)
 #merging barometric pressure into data sets.
 NaCl_data_pres <- merge(NaCl_data, NaCl_barom, by="date_test")
 KCl_data_pres <- merge(KCl_data, KCl_barom, by="date_test")
+
+
 
 ```
 
@@ -79,17 +81,26 @@ probos_K <- subset(KCl_data_pres, receptor == "prob")
 
 ```
 
-The bootstrap function used to generate CIs around average responses to each tastant (water, sugar, and salt) in the following plots.
+#Visualizing the effects of pressure changes on response rates
+We started by looking at how these average responses to each tastant were impacted by changes in barometric pressure by regressing response on delta_pres.
 
-```{r custom bootstrap function, echo=TRUE}
+```{r plots_delta_pres, echo=TRUE , fig.height = 8, fig.width = 8, fig.align = "center"}
 
-#writing bootstrapped 95% CI function
-boot.fn <- function(x, N=5000) {
-  Int.1 <- replicate(N, mean(sample(x, size= length(x), replace=T)))
-  Int.CI <- quantile(Int.1, probs=c(0.025,0.975))
-  Int.CI
-}
+#NaCl experiment first
+par(mfrow=c(2,3))
+plot(jitter(probos_N$avg_h2o)~jitter(probos_N$delta_pres), ylab = "avg_water", xlab = "delta BP")
+plot(jitter(probos_N$avg_sugar)~jitter(probos_N$delta_pres), ylab = "avg_sugar", xlab = "delta BP")
+plot(jitter(probos_N$avg_salt)~jitter(probos_N$delta_pres), ylab = "avg_nacl", xlab = "delta BP")
+
+#KCl experiment next
+plot(jitter(probos_K$avg_h2o)~jitter(probos_K$delta_pres), ylab = "avg_water", xlab = "delta BP")
+plot(jitter(probos_K$avg_sugar)~jitter(probos_K$delta_pres), ylab = "avg_sugar", xlab = "delta BP")
+plot(jitter(probos_K$avg_salt)~jitter(probos_K$delta_pres), ylab = "avg_sugar", xlab = "delta BP")
+
 ```
+
+If any trend exists in these plots, it is that large changes in barometric pressure potentially lead to slightly lower response rates overall - to any tastant.
+
 
 #Plotting average per fly responses
 
@@ -99,6 +110,14 @@ Then I applied the mean and bootstrap functions to my dataset to calculate and p
 
 #Mean water response rates (2.5, 97.5% CIs)
 ```{r avg_water_responses, echo=TRUE}
+
+#writing bootstrapped 95% CI function
+boot.fn <- function(x, N=5000) {
+  Int.1 <- replicate(N, mean(sample(x, size= length(x), replace=T)))
+  Int.CI <- quantile(Int.1, probs=c(0.025,0.975))
+  Int.CI
+}
+
 #printing overall means and CIs
 mean.avg_h2o.NaCl <- tapply(probos_N$avg_h2o, probos_N$Allele, mean)
 CI.avg_h2o.NaCl <- tapply(probos_N$avg_h2o, probos_N$Allele, boot.fn)
@@ -283,13 +302,13 @@ lineplot.CI(Allele, avg_sugar, group = Background, data = NaCl_f, cex = 1.5, xla
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_salt, group = Background, data = NaCl_m, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_NaCl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_nacl", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "NaCl Response by Males",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_salt, group = Background, data = NaCl_f, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_NaCl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_nacl", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "NaCl Response by Females",
             ci.fun= boot.fn)
@@ -328,17 +347,20 @@ lineplot.CI(Allele, avg_sugar, group = Background, data = KCl_f, cex = 1.5, xlab
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_salt, group = Background, data = KCl_m, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_KCl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_kcl", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "KCl Response by Males",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_salt, group = Background, data = KCl_f, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_KCl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_kcl", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "KCl Response by Females",
             ci.fun= boot.fn)
 
 ```
+
+#Visualizing the effects of pressure changes on response rates
+
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
