@@ -228,12 +228,12 @@ NaCl500 <- subset(probos_N, salt_conc == 500)
 
 #plotting salt responses
 lineplot.CI(Background, avg_salt, group = Allele, data = NaCl100, cex = 1.5, xlab = "Background", 
-            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_salt_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16), main = "100mM",
             ci.fun= boot.fn)
 
 lineplot.CI(Background, avg_salt, group = Allele, data = NaCl500, cex = 1.5, xlab = "Background", 
-            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_salt_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16), main = "500mM",
             ci.fun= boot.fn)
 
@@ -250,13 +250,13 @@ KCl100 <- subset(probos_K, salt_conc == 100)
 KCl500 <- subset(probos_K, salt_conc == 500)
 
 lineplot.CI(Background, avg_salt, group = Allele, data = KCl100, cex = 1.5, xlab = "Background", 
-            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_salt_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16),
             main = "100mM",
             ci.fun= boot.fn)
 
 lineplot.CI(Background, avg_salt, group = Allele, data = KCl500, cex = 1.5, xlab = "Background", 
-            ylab = "avg_salt", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_salt_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("orange", "blue",  "red", "green", "black"), pch = c(16,16,16,16,16),
             main = "500mM",
             ci.fun= boot.fn)
@@ -278,37 +278,37 @@ NaCl_f <- subset(probos_N, Sex == "f")
 
 par(mfrow = c(3,2))
 lineplot.CI(Allele, avg_h2o, group = Background, data = NaCl_m, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_water_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "Water Response by Males",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_h2o, group = Background, data = NaCl_f, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_water_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "Water Response by Females",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_sugar, group = Background, data = NaCl_m, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_sugar_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "Sugar Response by Males",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_sugar, group = Background, data = NaCl_f, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_sugar_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "Sugar Response by Females",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_salt, group = Background, data = NaCl_m, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_nacl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_nacl_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "NaCl Response by Males",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_salt, group = Background, data = NaCl_f, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_nacl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_nacl_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "NaCl Response by Females",
             ci.fun= boot.fn)
@@ -323,44 +323,89 @@ KCl_f <- subset(probos_K, Sex == "f")
 
 par(mfrow = c(3,2))
 lineplot.CI(Allele, avg_h2o, group = Background, data = KCl_m, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_water_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "Water Response by Males",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_h2o, group = Background, data = KCl_f, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_water_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "Water Response by Females",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_sugar, group = Background, data = KCl_m, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_sugar_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "Sugar Response by Males",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_sugar, group = Background, data = KCl_f, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_sugar_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "Sugar Response by Females",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_salt, group = Background, data = KCl_m, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_kcl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_kcl_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "KCl Response by Males",
             ci.fun= boot.fn)
 
 lineplot.CI(Allele, avg_salt, group = Background, data = KCl_f, cex = 1.5, xlab = "Allele", 
-            ylab = "avg_kcl", ylim = c(0, 1), cex.lab = 1.5, 
+            ylab = "avg_kcl_resp", ylim = c(0, 1), cex.lab = 1.5, 
             col = c("blue",  "red"), pch = c(16,16,16,16,16),
             main = "KCl Response by Females",
             ci.fun= boot.fn)
 
 ```
 
-#Visualizing the effects of pressure changes on response rates
+#Tarsal responses to water, sugar and NaCl
+We also collected data on the proboscis extension responses of D. melanogaster when the same tastants were applied to their tarsi. Response data were only collected in a single experiment where the aversive tastant was NaCl.  For the sake of comparison, I have plotted them next to the responses from the experiment where NaCl was applied to the labellum. 
 
+```{r NaCl_tarsal_response_plots, echo=TRUE, fig.height = 8, fig.width = 8, fig.align = "center"}
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+#subsetting for tarsal data
+tars_N <- subset(NaCl_data_pres, receptor == "tars")  
+
+par(mfrow=c(3,2))
+
+lineplot.CI(Allele, avg_h2o, group = Background, data = tars_N, cex = 1.5, xlab = "Allele", 
+                     ylab = "avg_h2o_resp", ylim = c(0, 0.3), cex.lab = 1.5, 
+                     col = c("blue",  "red"), main = "Tarsal Responses to Water",
+                     pch = c(16,16,16,16,16),
+                     ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_h2o, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
+                     ylab = "avg_h2o_resp", ylim = c(0, 0.3), cex.lab = 1.5, 
+                     col = c("blue",  "red"), 
+                     pch = c(16,16,16,16,16), main = "Labellar Responses to Water",
+                     ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_sugar, group = Background, data = tars_N, cex = 1.5, xlab = "Allele", 
+                     ylab = "avg_sugar_resp", ylim = c(0, 1), cex.lab = 1.5, 
+                     col = c("blue",  "red"), main = "Tarsal Responses to Sugar",
+                     pch = c(16,16,16,16,16),
+                     ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_sugar, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
+                     ylab = "avg_sugar_resp", ylim = c(0, 1), cex.lab = 1.5, 
+                     col = c("blue",  "red"), main = "Labellar Responses to Sugar",
+                     pch = c(16,16,16,16,16),
+                     ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_h2o, group = Background, data = tars_N, cex = 1.5, xlab = "Allele", 
+                     ylab = "avg_NaCl_resp", ylim = c(0, 0.3), cex.lab = 1.5, 
+                     col = c("blue",  "red"), main = "Tarsal Responses to NaCl",
+                     pch = c(16,16,16,16,16),
+                     ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_h2o, group = Background, data = probos_N, cex = 1.5, xlab = "Allele", 
+                     ylab = "avg_NaCl_resp", ylim = c(0, 0.3), cex.lab = 1.5, 
+                     col = c("blue",  "red"), main = "Labellar Responses to NaCl",
+                     pch = c(16,16,16,16,16),
+                     ci.fun= boot.fn)
+```
+
+These plots indicate that: 1) responses to all tastants were generally lower when tastants were applied to the tarsi, and 2) allelic trends seen in the responses by the labellar sensilla are not similar to those seen from tarsal sensilla. 
+
