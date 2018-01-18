@@ -95,6 +95,7 @@ boot.fn <- function(x, N=5000) {
 
 Then I applied the mean and bootstrap functions to my dataset to calculate and plot average per fly response to each tastant (water, sugar, then salt) when applied to the labellar sensilla. Note that the plots allow us to visualize whether there is an interaction between allele and genetic background.  Responses to each tastant are plotted separately for NaCl and KCl experiments.
 
+**Note** that in a few of the plots I get the following error: "zero-length arrow is of indeterminate angle and so skipped".  This indicates that a CI is too small to be plotted in our figure, always with sd58d populations.  These small CIs are  likely due to the combination of smaller 58d sample sizes, and a lack of variation in responses by individuals to some tastants.
 
 #Mean water response rates (2.5, 97.5% CIs)
 ```{r avg_water_responses, echo=TRUE}
@@ -244,7 +245,100 @@ lineplot.CI(Background, avg_salt, group = Allele, data = KCl500, cex = 1.5, xlab
 ```
 
 When KCl was used as the aversive tastant, individuals bearing the sde3 and sdetx4 allele were most likely to respond if they had a SAM genetic background, and this effect was most apparent at lower concentrations of KCl.
+
+
 #Differences between male and female responses
 
-To identify whether there were any differences between male and female
+We also visualized whether there were any differences in response rates by males and virgin females. Given that sex-specific differences exist for a multitude of D. melanogaster behavioral traits, we expected these differences would manifest themselves not only for the salt treatments, but the sugar and water treatments as well. Responses to each tastant are plotted below.
+
+```{r NaCl_responses_by_sex_figs, echo=TRUE, fig.height = 8, fig.width = 8, fig.align = "center"}
+
+#NaCl plots first
+NaCl_m <- subset(probos_N, Sex == "m")
+NaCl_f <- subset(probos_N, Sex == "f")
+
+par(mfrow = c(3,2))
+lineplot.CI(Allele, avg_h2o, group = Background, data = NaCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Water Response by Males",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_h2o, group = Background, data = NaCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Water Response by Females",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_sugar, group = Background, data = NaCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Sugar Response by Males",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_sugar, group = Background, data = NaCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Sugar Response by Females",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_salt, group = Background, data = NaCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_NaCl", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "NaCl Response by Males",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_salt, group = Background, data = NaCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_NaCl", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "NaCl Response by Females",
+            ci.fun= boot.fn)
+
+```
+
+```{r KCl_responses_by_sex_figs, echo=TRUE, fig.height = 8, fig.width = 8, fig.align = "center"}
+
+#KCl plots next
+KCl_m <- subset(probos_K, Sex == "m")
+KCl_f <- subset(probos_K, Sex == "f")
+
+par(mfrow = c(3,2))
+lineplot.CI(Allele, avg_h2o, group = Background, data = KCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Water Response by Males",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_h2o, group = Background, data = KCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Water Response by Females",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_sugar, group = Background, data = KCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Sugar Response by Males",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_sugar, group = Background, data = KCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Sugar Response by Females",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_salt, group = Background, data = KCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_KCl", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "KCl Response by Males",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_salt, group = Background, data = KCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_KCl", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "KCl Response by Females",
+            ci.fun= boot.fn)
+
+```
+
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

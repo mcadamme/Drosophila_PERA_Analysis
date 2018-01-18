@@ -86,6 +86,8 @@ Plotting average per fly responses
 
 Then I applied the mean and bootstrap functions to my dataset to calculate and plot average per fly response to each tastant (water, sugar, then salt) when applied to the labellar sensilla. Note that the plots allow us to visualize whether there is an interaction between allele and genetic background. Responses to each tastant are plotted separately for NaCl and KCl experiments.
 
+**Note** that in a few of the plots I get the following error: "zero-length arrow is of indeterminate angle and so skipped". This indicates that a CI is too small to be plotted in our figure, always with sd58d populations. These small CIs are likely due to the combination of smaller 58d sample sizes, and a lack of variation in responses by individuals to some tastants.
+
 Mean water response rates (2.5, 97.5% CIs)
 ==========================================
 
@@ -109,19 +111,19 @@ CI.avg_h2o.NaCl
     ## 
     ## $etx4
     ##       2.5%      97.5% 
-    ## 0.07048458 0.11600587 
+    ## 0.06901615 0.11747430 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.1329966 0.2037037 
+    ## 0.1313131 0.2020202 
     ## 
     ## $sde3
     ##       2.5%      97.5% 
-    ## 0.08775029 0.14310954 
+    ## 0.08833922 0.14194641 
     ## 
     ## $wt
     ##       2.5%      97.5% 
-    ## 0.05361111 0.08111806
+    ## 0.05333333 0.08027778
 
 ``` r
 #Plot to view interactions between background and allele for water responses in NaCl assay
@@ -154,19 +156,19 @@ CI.avg_h2o.KCl
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.1075758 0.1727273 
+    ## 0.1075758 0.1712121 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.1040189 0.1654846 
+    ## 0.1028369 0.1654846 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.1193853 0.1867612 
+    ## 0.1205674 0.1867612 
     ## 
     ## $wt
     ##       2.5%      97.5% 
-    ## 0.04417671 0.06425703
+    ## 0.04381161 0.06425703
 
 ``` r
 #Plot to view interactions between background and allele for water responses in KCl assay
@@ -201,7 +203,7 @@ CI.avg_sug.NaCl
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.3370044 0.4449890 
+    ## 0.3414097 0.4471366 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
@@ -209,11 +211,11 @@ CI.avg_sug.NaCl
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.5123675 0.6130742 
+    ## 0.5141343 0.6148410 
     ## 
     ## $wt
     ##      2.5%     97.5% 
-    ## 0.2933125 0.3558333
+    ## 0.2916667 0.3558542
 
 ``` r
 #Plot to view interactions between background and allele for sugar responses in NaCl assay
@@ -246,7 +248,7 @@ CI.avg_sug.KCl
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.5750000 0.6795455 
+    ## 0.5727273 0.6818182 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
@@ -254,11 +256,11 @@ CI.avg_sug.KCl
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.5425532 0.6365248 
+    ## 0.5407358 0.6365248 
     ## 
     ## $wt
     ##      2.5%     97.5% 
-    ## 0.2940854 0.3472070
+    ## 0.2935378 0.3472070
 
 ``` r
 #Plot to view interactions between background and allele for sugar responses in KCl assay
@@ -297,15 +299,15 @@ CI.avg_salt.NaCl
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.3434343 0.4621212 
+    ## 0.3409091 0.4621212 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.3286219 0.4310954 
+    ## 0.3286219 0.4275618 
     ## 
     ## $wt
     ##      2.5%     97.5% 
-    ## 0.1083333 0.1541667
+    ## 0.1091667 0.1541667
 
 ``` r
 #Plot to view interactions between background and allele for salt responses in NaCl assay
@@ -334,7 +336,7 @@ CI.avg_salt.KCl
 
     ## $`58d`
     ##     2.5%    97.5% 
-    ## 0.127907 0.244186 
+    ## 0.127907 0.250000 
     ## 
     ## $etx4
     ##      2.5%     97.5% 
@@ -342,15 +344,15 @@ CI.avg_salt.KCl
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.1187943 0.1932624 
+    ## 0.1170213 0.1914894 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.2890071 0.3865248 
+    ## 0.2872340 0.3865248 
     ## 
     ## $wt
     ##       2.5%      97.5% 
-    ## 0.04654984 0.07009858
+    ## 0.04600219 0.07064622
 
 ``` r
 #Plot to view interactions between background and allele for salt responses in KCl assay
@@ -427,6 +429,113 @@ lineplot.CI(Background, avg_salt, group = Allele, data = KCl500, cex = 1.5, xlab
 
 ![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/responses_by_KCl_conc-2.png)
 
-When KCl was used as the aversive tastant, individuals bearing the sde3 and sdetx4 allele were most likely to respond if they had a SAM genetic background, and this effect was most apparent at lower concentrations of KCl. \#Differences between male and female responses
+When KCl was used as the aversive tastant, individuals bearing the sde3 and sdetx4 allele were most likely to respond if they had a SAM genetic background, and this effect was most apparent at lower concentrations of KCl.
 
-To identify whether there were any differences between male and female Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Differences between male and female responses
+=============================================
+
+We also visualized whether there were any differences in response rates by males and virgin females. Given that sex-specific differences exist for a multitude of D. melanogaster behavioral traits, we expected these differences would manifest themselves not only for the salt treatments, but the sugar and water treatments as well. Responses to each tastant are plotted below.
+
+``` r
+#NaCl plots first
+NaCl_m <- subset(probos_N, Sex == "m")
+NaCl_f <- subset(probos_N, Sex == "f")
+
+par(mfrow = c(3,2))
+lineplot.CI(Allele, avg_h2o, group = Background, data = NaCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Water Response by Males",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_h2o, group = Background, data = NaCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Water Response by Females",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_sugar, group = Background, data = NaCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Sugar Response by Males",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_sugar, group = Background, data = NaCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Sugar Response by Females",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_salt, group = Background, data = NaCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_NaCl", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "NaCl Response by Males",
+            ci.fun= boot.fn)
+```
+
+    ## Warning in arrows(leg.vals$xvals[CI.seln], CI.plot[, 1], leg.vals
+    ## $xvals[CI.seln], : zero-length arrow is of indeterminate angle and so
+    ## skipped
+
+``` r
+lineplot.CI(Allele, avg_salt, group = Background, data = NaCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_NaCl", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "NaCl Response by Females",
+            ci.fun= boot.fn)
+```
+
+<img src="PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/NaCl_responses_by_sex_figs-1.png" style="display: block; margin: auto;" />
+
+``` r
+#KCl plots next
+KCl_m <- subset(probos_K, Sex == "m")
+KCl_f <- subset(probos_K, Sex == "f")
+
+par(mfrow = c(3,2))
+lineplot.CI(Allele, avg_h2o, group = Background, data = KCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Water Response by Males",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_h2o, group = Background, data = KCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_water", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Water Response by Females",
+            ci.fun= boot.fn)
+```
+
+    ## Warning in arrows(leg.vals$xvals[CI.seln], CI.plot[, 1], leg.vals
+    ## $xvals[CI.seln], : zero-length arrow is of indeterminate angle and so
+    ## skipped
+
+``` r
+lineplot.CI(Allele, avg_sugar, group = Background, data = KCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Sugar Response by Males",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_sugar, group = Background, data = KCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_sugar", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "Sugar Response by Females",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_salt, group = Background, data = KCl_m, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_KCl", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "KCl Response by Males",
+            ci.fun= boot.fn)
+
+lineplot.CI(Allele, avg_salt, group = Background, data = KCl_f, cex = 1.5, xlab = "Allele", 
+            ylab = "avg_KCl", ylim = c(0, 1), cex.lab = 1.5, 
+            col = c("blue",  "red"), pch = c(16,16,16,16,16),
+            main = "KCl Response by Females",
+            ci.fun= boot.fn)
+```
+
+<img src="PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/KCl_responses_by_sex_figs-1.png" style="display: block; margin: auto;" />
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
