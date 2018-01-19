@@ -1,5 +1,5 @@
 ---
-  title: "*D.melanogaster* PERA Exploratory Data Analysis"
+  title: "D. melanogaster PERA Exploratory Data Analysis"
   author: "Megan Fritz"
   date: "December 19, 2017"
   output: github_document
