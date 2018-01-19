@@ -1,4 +1,4 @@
-PERA\_Exploratory\_Data\_Analysis
+*D.melanogaster* PERA Exploratory Data Analysis
 ================
 Megan Fritz
 December 19, 2017
@@ -23,9 +23,9 @@ library(sciplot)
 ```
 
 Adding barometric pressure data
-===============================
+-------------------------------
 
-Because changes in barometric pressure are known to modulate insect behavioral responses (see Ankney 1984, Pellegrino et al. 2013), we explored the potential it had to influence gustation responses in our assays. These data were obtained from the weather underground historical data archive (<http://www.wunderground.com/history>) for Lansing, MI.
+Because changes in barometric pressure are known to modulate insect behavioral responses (see Ankney 1984, Pellegrino et al. 2013), we explored the potential it had to influence gustation responses of *D. melanogaster* in our assays. These data were obtained from the weather underground historical data archive (<http://www.wunderground.com/history>) for Lansing, MI.
 
 ``` r
 NaCl_barom <- read.table("./Data/pera/NaCl_barom_readings.txt", header = T)
@@ -40,9 +40,9 @@ KCl_data_pres <- merge(KCl_data, KCl_barom, by="date_test")
 ```
 
 Calculating average per fly responses
-=====================================
+-------------------------------------
 
-Our goal was to examine whether gustation responses were influenced by genetic background, scalloped allele, sex, etc. We first visualized these relationships by plotting average fly responses to each tastant (water, sugar, salt) by each of these factors. We first had to generate these average responses per fly for each of two experiments targeting the labellar sensilla - one where the aversive salt tastant was NaCl and another where the salt was KCl.
+Our goal was to examine whether gustation responses were influenced by genetic background, *scalloped* (*sd*) allele, sex, etc. We first visualized these relationships by plotting average fly responses to each tastant (water, sugar, salt) by each of these factors. We first had to generate these average responses per fly for each of two experiments targeting the labellar sensilla - one where the aversive salt tastant was NaCl and another where the salt was KCl.
 
 ``` r
 #Getting average response per fly to each stimulus
@@ -71,9 +71,9 @@ probos_K <- subset(KCl_data_pres, receptor == "prob")
 ```
 
 Visualizing the effects of pressure changes on response rates
-=============================================================
+-------------------------------------------------------------
 
-We started by looking at how these average responses to each tastant were impacted by changes in barometric pressure by regressing response on delta\_pres.
+We started by looking at how these average responses to each tastant were impacted by changes in barometric pressure by plotting response against delta\_pres.
 
 ``` r
 #NaCl experiment first
@@ -90,17 +90,17 @@ plot(jitter(probos_K$avg_salt)~jitter(probos_K$delta_pres), ylab = "avg_sugar", 
 
 <img src="PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/plots_delta_pres-1.png" style="display: block; margin: auto;" />
 
-If any trend exists in these plots, it is that large changes in barometric pressure potentially lead to slightly lower response rates overall - to any tastant.
+If any trend existed in these plots, it was that large changes in barometric pressure potentially led to slightly lower response rates overall - to any tastant.
 
 Plotting average per fly responses
-==================================
+----------------------------------
 
-Then I applied the mean and bootstrap functions to my dataset to calculate and plot average per fly response to each tastant (water, sugar, then salt) when applied to the labellar sensilla. Note that the plots allow us to visualize whether there is an interaction between allele and genetic background. Responses to each tastant are plotted separately for NaCl and KCl experiments.
+Then I applied a mean and custom bootstrapped CI function to my dataset to calculate and plot average per fly response to each tastant (water, sugar, then salt) when applied to the labellar sensilla. Note that the plots allow us to visualize whether there is an interaction between allele and genetic background. Responses to each tastant are plotted separately for NaCl and KCl experiments.
 
-**Note** that in a few of the plots I get the following error: "zero-length arrow is of indeterminate angle and so skipped". This indicates that a CI is too small to be plotted in our figure, always with sd58d populations. These small CIs are likely due to the combination of smaller 58d sample sizes, and a lack of variation in responses by individuals to some tastants.
+**Note** that in a few of the plots I get the following error: "zero-length arrow is of indeterminate angle and so skipped". This indicates that a CI is too small to be plotted in our figure, always with *sd*<sup>58d</sup> populations. These small CIs are likely due to the combination of smaller *sd*<sup>58d</sup> sample sizes, and a lack of variation in responses by individuals to some tastants.
 
 Mean water response rates (2.5, 97.5% CIs)
-==========================================
+------------------------------------------
 
 ``` r
 #writing bootstrapped 95% CI function
@@ -133,11 +133,11 @@ CI.avg_h2o.NaCl
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.1329966 0.2037037 
+    ## 0.1313131 0.2020202 
     ## 
     ## $sde3
     ##       2.5%      97.5% 
-    ## 0.08773557 0.14193168 
+    ## 0.08951708 0.14310954 
     ## 
     ## $wt
     ##       2.5%      97.5% 
@@ -178,7 +178,7 @@ CI.avg_h2o.KCl
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.1040189 0.1654846 
+    ## 0.1040189 0.1678487 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
@@ -186,7 +186,7 @@ CI.avg_h2o.KCl
     ## 
     ## $wt
     ##       2.5%      97.5% 
-    ## 0.04381161 0.06425703
+    ## 0.04417671 0.06425703
 
 ``` r
 #Plot to view interactions between background and allele for water responses in KCl assay
@@ -199,7 +199,7 @@ lineplot.CI(Allele, avg_h2o, group = Background, data = probos_K, cex = 1.5, xla
 ![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/avg_water_responses-2.png)
 
 Mean sugar response rates (2.5, 97.5% CIs)
-==========================================
+------------------------------------------
 
 ``` r
 #printing overall means and CIs
@@ -216,24 +216,24 @@ CI.avg_sug.NaCl
 ```
 
     ## $`58d`
-    ##     2.5%    97.5% 
-    ## 0.258125 0.450000 
+    ##  2.5% 97.5% 
+    ##  0.25  0.45 
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.3370044 0.4471366 
+    ## 0.3392070 0.4493392 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.5429293 0.6565657 
+    ## 0.5429293 0.6540404 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.5123675 0.6148410 
+    ## 0.5123675 0.6130742 
     ## 
     ## $wt
     ##      2.5%     97.5% 
-    ## 0.2916667 0.3575000
+    ## 0.2916667 0.3566667
 
 ``` r
 #Plot to view interactions between background and allele for sugar responses in NaCl assay
@@ -262,15 +262,15 @@ CI.avg_sug.KCl
 
     ## $`58d`
     ##      2.5%     97.5% 
-    ## 0.2732558 0.4418605 
+    ## 0.2674419 0.4418605 
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.5727273 0.6795455 
+    ## 0.5727273 0.6818182 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.4698582 0.5709220 
+    ## 0.4698582 0.5691489 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
@@ -278,7 +278,7 @@ CI.avg_sug.KCl
     ## 
     ## $wt
     ##      2.5%     97.5% 
-    ## 0.2929901 0.3461117
+    ## 0.2946331 0.3488499
 
 ``` r
 #Plot to view interactions between background and allele for sugar responses in KCl assay
@@ -291,7 +291,7 @@ lineplot.CI(Allele, avg_sugar, group = Background, data = probos_K, cex = 1.5, x
 ![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/avg_sugar_responses-2.png)
 
 Mean salt response rates (2.5, 97.5% CIs)
-=========================================
+-----------------------------------------
 
 ``` r
 #printing overall means and CIs
@@ -308,12 +308,12 @@ CI.avg_salt.NaCl
 ```
 
     ## $`58d`
-    ##      2.5%     97.5% 
-    ## 0.0750000 0.2416667 
+    ##       2.5%      97.5% 
+    ## 0.08333333 0.24166667 
     ## 
     ## $etx4
     ##      2.5%     97.5% 
-    ## 0.2202643 0.3171806 
+    ## 0.2180617 0.3149780 
     ## 
     ## $sd1
     ##      2.5%     97.5% 
@@ -321,11 +321,11 @@ CI.avg_salt.NaCl
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.3286219 0.4310954 
+    ## 0.3286219 0.4293286 
     ## 
     ## $wt
     ##      2.5%     97.5% 
-    ## 0.1083333 0.1541667
+    ## 0.1083333 0.1550000
 
 ``` r
 #Plot to view interactions between background and allele for salt responses in NaCl assay
@@ -362,11 +362,11 @@ CI.avg_salt.KCl
     ## 
     ## $sd1
     ##      2.5%     97.5% 
-    ## 0.1170213 0.1914894 
+    ## 0.1187943 0.1914894 
     ## 
     ## $sde3
     ##      2.5%     97.5% 
-    ## 0.2872340 0.3882979 
+    ## 0.2890071 0.3865248 
     ## 
     ## $wt
     ##       2.5%      97.5% 
@@ -382,15 +382,15 @@ lineplot.CI(Allele, avg_salt, group = Background, data = probos_K, cex = 1.5, xl
 
 ![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/avg_salt_responses-2.png)
 
-This final plot, in particular suggested that responses to KCl were higher for individuals bearing the sde3 and sdetx4 alleles in the SAM background relative to SAM wt. More interestingly, KCl responses were not elevated in individuals bearing the sde3 and sdetx4 alleles in the ORE background relative to the ORE wt.
+This final plot, in particular suggested that responses to KCl were higher for individuals bearing the *sd*<sup>e3</sup> and *sd*<sup>etx4</sup> alleles in the SAM background relative to SAM wild-type (wt). More interestingly, KCl responses were not elevated in individuals bearing the *sd*<sup>e3</sup> and *sd*<sup>etx4</sup> alleles in the ORE background relative to the ORE wt.
 
 Effects of salt concentration on salt response rate.
-====================================================
+----------------------------------------------------
 
 For each of the two experiments where NaCl and KCl was applied to the labellar sensilla, we used two different salt concentrations - 100mM and 500mM for each salt. Here we plotted the effects of these salt concentrations, first for NaCl and then KCl response rates.
 
 NaCl response rates for each concentration
-==========================================
+------------------------------------------
 
 ``` r
 #subsetting by NaCl concentration, and plotting salt response means (+/-95% CIs) for each subset.
@@ -415,10 +415,10 @@ lineplot.CI(Background, avg_salt, group = Allele, data = NaCl500, cex = 1.5, xla
 
 ![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/responses_by_NaCl_conc-2.png)
 
-In this second plot, when NaCl concentrations were higher, individuals bearing the sde3 allele were more likely to respond if they had a SAM genetic background relative to those with the ORE genetic background. This effect was really only seen at the higher concentration of NaCl.
+In this second plot, when NaCl concentrations were higher, individuals bearing the *sd*<sup>e3</sup> allele were more likely to respond if they had a SAM genetic background relative to those with the ORE genetic background. This effect was really only seen at the higher concentration of NaCl.
 
 KCl response rates for each concentration
-=========================================
+-----------------------------------------
 
 ``` r
 KCl100 <- subset(probos_K, salt_conc == 100)
@@ -447,12 +447,12 @@ lineplot.CI(Background, avg_salt, group = Allele, data = KCl500, cex = 1.5, xlab
 
 ![](PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/responses_by_KCl_conc-2.png)
 
-When KCl was used as the aversive tastant, individuals bearing the sde3 and sdetx4 allele were most likely to respond if they had a SAM genetic background, and this effect was most apparent at lower concentrations of KCl.
+When KCl was used as the aversive tastant, individuals bearing the *sd*<sup>e3</sup> and *sd*<sup>etx4</sup> allele were most likely to respond if they had a SAM genetic background, and this effect was most apparent at lower concentrations of KCl.
 
 Differences between male and female responses
-=============================================
+---------------------------------------------
 
-We also visualized whether there were any differences in response rates by males and virgin females. Given that sex-specific differences exist for a multitude of D. melanogaster behavioral traits, we expected these differences would manifest themselves not only for the salt treatments, but the sugar and water treatments as well. Responses to each tastant are plotted below.
+We also visualized whether there were any differences in response rates by males and virgin females. Given that sex-specific differences exist for a multitude of *D. melanogaster* behavioral traits, we expected these differences would manifest themselves not only for the salt treatments, but the sugar and water treatments as well. Responses to each tastant are plotted below.
 
 ``` r
 #NaCl plots first
@@ -557,9 +557,9 @@ lineplot.CI(Allele, avg_salt, group = Background, data = KCl_f, cex = 1.5, xlab 
 <img src="PERA_Exploratory_Data_Analysis_MF_files/figure-markdown_github/KCl_responses_by_sex_figs-1.png" style="display: block; margin: auto;" />
 
 Tarsal responses to water, sugar and NaCl
-=========================================
+-----------------------------------------
 
-We also collected data on the proboscis extension responses of D. melanogaster when the same tastants were applied to their tarsi. Response data were only collected in a single experiment where the aversive tastant was NaCl. For the sake of comparison, I have plotted them next to the responses from the experiment where NaCl was applied to the labellum.
+We also collected data on the proboscis extension responses of *D. melanogaster* when the same tastants were applied to their tarsi. Response data were only collected in a single experiment where the aversive tastant was NaCl. For the sake of comparison, I have plotted them next to the responses from the experiment where NaCl was applied to the labellum.
 
 ``` r
 #subsetting for tarsal data
